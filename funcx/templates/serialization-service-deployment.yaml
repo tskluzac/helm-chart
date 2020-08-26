@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-funcx-serialization-service
+spec:
+  replicas: {{ .Values.serializationService.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-funcx-serialization-service
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-funcx-serialization-service
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-funcx-serialization-service
+        image: {{ .Values.serializationService.image }}:{{ .Values.serializationService.tag }}
+        tty: true
+        stdin: true
+        imagePullPolicy: {{ .Values.serializationService.pullPolicy }}
+        {{- if .Values.serializationService.resources }}
+        resources:
+{{ toYaml .Values.serializationService.resources | indent 10 }}
+        {{- end }}
+        ports:
+          - containerPort: 5000
+

@@ -17,6 +17,11 @@ webService:
   globusClient: <<your app client>>
   globusKey: <<your app key>>
 
+serializationService:
+  image: funcx/serialization-service
+  tag: master
+  pullPolicy: IfNotPresent
+
 forwarderIP: host.docker.internal
 
 endpoint:
