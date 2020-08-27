@@ -20,7 +20,8 @@ webService:
 serializationService:
   image: funcx/serialization-service
   tag: master
-  pullPolicy: IfNotPresent
+#  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 forwarderIP: host.docker.internal
 
