@@ -97,6 +97,10 @@ configuration
 | `endpoint.image`             | Docker image name for the endpoint                               | funcx/kube-endpoint |
 | `endpoint.tag`               | Docker image tag for the endpoint                                | 213_helm_chart |
 | `endpoint.pullPolicy`        | Kubernetes pull policy for the endpoint container                | IfNotPresent |
+| `forwarder.enabled`            | Deploy an internal kubernetes forwarder? | true |
+| `forwarder.image`             | Docker image name for the forwarder                               | funcx/funcx/forwarder |
+| `forwarder.tag`               | Docker image tag for the forwarder                                | dev |
+| `forwarder.pullPolicy`        | Kubernetes pull policy for the forwarder container                | IfNotPresent |
 | `ingress.enabled`              | Deploy an ingres to route traffic to web app?                       | false |
 | `ingress.host`                 | Host name for the ingress. You will be able to reach your web service via a url that starts with the helm release name and ends with this host | uc.ssl-hep.org |
 | `postgres.enabled`             | Deploy a postgres instance?                                         | true |
