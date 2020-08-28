@@ -23,6 +23,10 @@ spec:
           value: "6379"
         - name: ADVERTISED_FORWARDER_ADDRESS
           value: "{{ .Release.Name }}-forwarder"
+        - name: MIN_IC_PORT
+          value: "{{ .Values.forwarder.minInterchangePort }}"
+        - name: MAX_IC_PORT
+          value: "{{ .Values.forwarder.maxInterchangePort }}"
         tty: true
         stdin: true
         imagePullPolicy: {{ .Values.forwarder.pullPolicy }}
@@ -32,7 +36,7 @@ spec:
         {{- end }}
         ports:
           - containerPort: 8080  # Forwarder REST port
-          - containerPort: 54000 # Three forwarder ports to internal endpoint
-          - containerPort: 54001
-          - containerPort: 54002
+          - containerPort: {{ .Values.forwarder.minInterchangePort }}
+          - containerPort: {{ add .Values.forwarder.minInterchangePort 1 }}
+          - containerPort: {{ add .Values.forwarder.minInterchangePort 2 }}
 {{- end }}

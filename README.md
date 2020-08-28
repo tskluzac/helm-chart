@@ -98,6 +98,8 @@ configuration
 | `endpoint.tag`               | Docker image tag for the endpoint                                | 213_helm_chart |
 | `endpoint.pullPolicy`        | Kubernetes pull policy for the endpoint container                | IfNotPresent |
 | `forwarder.enabled`            | Deploy an internal kubernetes forwarder? | true |
+| `forwarder.minInterchangePort`    | The minimum port to assign interchanges. This will be the first port opened int he pod | 54000 |
+| `forwarder.maxInterchangePort`    | The maximum port to assign interchanges. Only the first three ports are opened in the pod | 54002 |
 | `forwarder.image`             | Docker image name for the forwarder                               | funcx/funcx/forwarder |
 | `forwarder.tag`               | Docker image tag for the forwarder                                | dev |
 | `forwarder.pullPolicy`        | Kubernetes pull policy for the forwarder container                | IfNotPresent |
