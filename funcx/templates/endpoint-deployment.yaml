@@ -13,6 +13,12 @@ spec:
       labels:
         app: {{ .Release.Name }}-endpoint
     spec:
+      initContainers:
+      - name: check-web-service
+        image: "ncsa/checks:latest"
+        env:
+          - name: URL
+            value: 'http://{{ .Release.Name }}-funcx-web-service:8000/v1/version'
       containers:
       - name: {{ .Release.Name }}-endpoint
         image: {{ .Values.endpoint.image }}:{{ .Values.endpoint.tag }}
