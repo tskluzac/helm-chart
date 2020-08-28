@@ -10,16 +10,16 @@ spec:
      targetPort: 8080
      name: "rest"
      protocol: TCP
-   - port: 54000
-     targetPort: 54000
+   - port: {{ .Values.forwarder.minInterchangePort }}
+     targetPort: {{ .Values.forwarder.minInterchangePort }}
      name: "zmq1"
      protocol: TCP
-   - port: 54001
-     targetPort: 54001
+   - port: {{ add .Values.forwarder.minInterchangePort 1 }}
+     targetPort: {{ add .Values.forwarder.minInterchangePort 1 }}
      name: "zmq2"
      protocol: TCP
-   - port: 54002
-     targetPort: 54002
+   - port: {{ add .Values.forwarder.minInterchangePort 2 }}
+     targetPort: {{ add .Values.forwarder.minInterchangePort 2 }}
      name: "zmq3"
      protocol: TCP
 

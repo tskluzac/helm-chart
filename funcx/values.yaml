@@ -20,8 +20,6 @@ webService:
   globusClient: <<your app client>>
   globusKey: <<your app key>>
 
-forwarderIP: host.docker.internal
-
 endpoint:
   enabled: true
   image: funcx/kube-endpoint
@@ -32,8 +30,10 @@ endpoint:
 forwarder:
   enabled: true
   image: funcx/forwarder
-  tag: dev
+  tag: configurable_ic_ports
   pullPolicy: IfNotPresent
+  minInterchangePort: 54000
+  maxInterchangePort: 54002
 
 postgres:
   enabled: true
