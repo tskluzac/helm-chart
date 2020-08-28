@@ -1,0 +1,30 @@
+{{- if .Values.forwarder.enabled -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-forwarder
+spec:
+  ports:
+   - port: 8080
+     targetPort: 8080
+     name: "rest"
+     protocol: TCP
+   - port: 54000
+     targetPort: 54000
+     name: "zmq1"
+     protocol: TCP
+   - port: 54001
+     targetPort: 54001
+     name: "zmq2"
+     protocol: TCP
+   - port: 54002
+     targetPort: 54002
+     name: "zmq3"
+     protocol: TCP
+
+  selector:
+    app: {{ .Release.Name }}-forwarder
+  type: ClusterIP
+
+  {{- end }}

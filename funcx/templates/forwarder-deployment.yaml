@@ -1,0 +1,38 @@
+{{- if .Values.forwarder.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-forwarder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-forwarder
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-forwarder
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-forwarder
+        image: {{ .Values.forwarder.image }}:{{ .Values.forwarder.tag }}
+        env:
+        - name: REDIS_HOST
+          value: "{{ .Release.Name }}-redis-master"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: ADVERTISED_FORWARDER_ADDRESS
+          value: "{{ .Release.Name }}-forwarder"
+        tty: true
+        stdin: true
+        imagePullPolicy: {{ .Values.forwarder.pullPolicy }}
+        {{- if .Values.forwarder.resources }}
+        resources:
+{{ toYaml .Values.forwarder.resources | indent 10 }}
+        {{- end }}
+        ports:
+          - containerPort: 8080  # Forwarder REST port
+          - containerPort: 54000 # Three forwarder ports to internal endpoint
+          - containerPort: 54001
+          - containerPort: 54002
+{{- end }}
