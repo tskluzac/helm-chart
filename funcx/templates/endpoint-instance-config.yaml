@@ -11,14 +11,16 @@ metadata:
 data:
   config.py: |
     from funcx_endpoint.endpoint.utils.config import Config
-    from parsl.providers import LocalProvider
+    from funcx_endpoint.providers.kubernetes.kube import KubernetesProvider
 
     config = Config(
         scaling_enabled=True,
-        provider=LocalProvider(
+        provider=KubernetesProvider(
             init_blocks=1,
             min_blocks=1,
             max_blocks=1,
+            image="{{ .Values.endpoint.workerImage }}",
+            worker_init="{{ .Values.endpoint.workerInit }}"
         ),
         max_workers_per_node=2,
         funcx_service_address="http://{{ .Release.Name }}-funcx-web-service:8000/v1"
