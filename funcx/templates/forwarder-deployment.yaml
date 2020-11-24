@@ -15,7 +15,10 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-forwarder
+        {{- /*
         image: {{ .Values.forwarder.image }}:{{ .Values.forwarder.tag }}
+        */}}
+        image: {{ .Values.forwarder.local_image }}
         env:
         - name: REDIS_HOST
           value: "{{ .Release.Name }}-redis-master"
@@ -23,10 +26,12 @@ spec:
           value: "6379"
         - name: ADVERTISED_FORWARDER_ADDRESS
           value: "{{ .Release.Name }}-forwarder"
-        - name: MIN_IC_PORT
-          value: "{{ .Values.forwarder.minInterchangePort }}"
-        - name: MAX_IC_PORT
-          value: "{{ .Values.forwarder.maxInterchangePort }}"
+        - name: TASKS_PORT
+          value: "{{ .Values.forwarder.tasksPort }}"
+        - name: RESULTS_PORT
+          value: "{{ .Values.forwarder.resultsPort }}"
+        - name: COMMANDS_PORT
+          value: "{{ .Values.forwarder.commandsPort }}"
         tty: true
         stdin: true
         imagePullPolicy: {{ .Values.forwarder.pullPolicy }}
@@ -36,7 +41,7 @@ spec:
         {{- end }}
         ports:
           - containerPort: 8080  # Forwarder REST port
-          - containerPort: {{ .Values.forwarder.minInterchangePort }}
-          - containerPort: {{ add .Values.forwarder.minInterchangePort 1 }}
-          - containerPort: {{ add .Values.forwarder.minInterchangePort 2 }}
+          - containerPort: {{ add .Values.forwarder.tasksPort 1 }}
+          - containerPort: {{ add .Values.forwarder.resultsPort 1 }}
+          - containerPort: {{ add .Values.forwarder.commandsPort 1 }}
 {{- end }}

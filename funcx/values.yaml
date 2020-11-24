@@ -30,10 +30,11 @@ funcx_endpoint:
 forwarder:
   enabled: true
   image: funcx/forwarder
-  tag: configurable_ic_ports
+  tag: forwarder_redesign
   pullPolicy: IfNotPresent
-  minInterchangePort: 54000
-  maxInterchangePort: 54003
+  tasksPort: 55001
+  resultsPort: 55002
+  commandsPort: 55003
 
 postgres:
   enabled: true
