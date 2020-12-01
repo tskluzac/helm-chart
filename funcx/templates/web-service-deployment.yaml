@@ -20,7 +20,10 @@ spec:
             value: 'postgresql://{{  .Values.postgresql.postgresqlUsername }}:{{ .Values.postgresql.postgresqlPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.postgresqlDatabase }}'
       containers:
       - name: {{ .Release.Name }}-funcx-web-service
+        {{- /*
         image: {{ .Values.webService.image }}:{{ .Values.webService.tag }}
+        */}}
+        image: {{ .Values.webService.local_image }}
         env:
         - name: APP_CONFIG_FILE
           value: "/opt/funcx/app.conf"
