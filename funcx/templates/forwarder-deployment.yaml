@@ -13,6 +13,7 @@ spec:
       labels:
         app: {{ .Release.Name }}-forwarder
     spec:
+      hostNetwork: true
       containers:
       - name: {{ .Release.Name }}-forwarder
         {{- /*
@@ -25,7 +26,9 @@ spec:
         - name: REDIS_PORT
           value: "6379"
         - name: ADVERTISED_FORWARDER_ADDRESS
-          value: "{{ .Release.Name }}-forwarder"
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         - name: TASKS_PORT
           value: "{{ .Values.forwarder.tasksPort }}"
         - name: RESULTS_PORT
@@ -42,6 +45,20 @@ spec:
         ports:
           - containerPort: 8080  # Forwarder REST port
           - containerPort: {{ add .Values.forwarder.tasksPort 1 }}
+            hostPort: {{ add .Values.forwarder.tasksPort 1 }}
           - containerPort: {{ add .Values.forwarder.resultsPort 1 }}
+            hostPort: {{ add .Values.forwarder.resultsPort 1 }}
           - containerPort: {{ add .Values.forwarder.commandsPort 1 }}
+            hostPort: {{ add .Values.forwarder.commandsPort 1 }}
+          - containerPort: 55005 # Debug
+            hostPort: 55005
+        volumeMounts:
+        - name: funcx-forwarder-secret
+          mountPath: /home/funcx/.curve
+          readOnly: true
+      volumes:
+      - name: funcx-forwarder-secret
+        secret:
+          secretName: funcx-forwarder-secretkey
+
 {{- end }}
