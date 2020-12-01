@@ -36,6 +36,13 @@ kubectl create secret generic funcx-sdk-tokens --from-file=credentials/funcx_sdk
 popd
 ```
 
+Similary you need the server secret key `funcx-forwarder-secretkey` for the forwarder service.
+```shell script
+# Make sure the server.key_secret file is in your $PWD/.curve dir
+# You have to get keys from Yadu
+kubectl create secret generic funcx-forwarder-secretkey --from-file=.curve/server.key_secret
+```
+
 ### Forwarder
 The forwarder needs to be able to open and manage arbitrary ports which is 
 not compatible with some of Kubernetes requirements. For now we will run it
