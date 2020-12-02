@@ -11,6 +11,8 @@ This application includes:
 * Postgres database
 * Redis Shared Data Structure
 
+> :warning: **THIS IS A TEST DEPLOYMENT**: The web-service and forwarder can be deployed, while the funcx-endpoint is not yet properly supported
+
 ## Preliminaries
 The following dependencies must be set up before you can deploy the helm chart:
 
@@ -43,6 +45,15 @@ Similary you need the server secret key `funcx-forwarder-secretkey` for the forw
 kubectl create secret generic funcx-forwarder-secretkey --from-file=.curve/server.key_secret
 ```
 
+> :warning: The `.curve/server.key` must be copied over to the .funcx/<ENDPOINT_NAME>/credentials folder
+  after a new endpoint is configured.
+
+If you have not setup your server secret key, please make new keys with the create_certs.py script
+```shell script
+# CD into the funcx-forwarder repo
+python3 test/create_certs.py -d .curve
+```
+
 ### Forwarder
 The forwarder needs to be able to open and manage arbitrary ports which is 
 not compatible with some of Kubernetes requirements. For now we will run it
@@ -57,7 +68,7 @@ Launch a copy of forwarder outside of kubernetes, listening on port 8080:
 1. Make a clone of this repository
 2. Download subcharts:
     ```shell script
-     helm dependency update funcx               
+     helm dependency update funcx
     ```
 3. Create your own `values.yaml` inside the Git ignored directory `deployed_values/`
 4. Obtain Globus Client ID and Secret. Paste them into your values.yaml as
@@ -83,6 +94,40 @@ is run prior to starting up the web service container. This setup image checks
 to see if the tables are there. If not, it runs the setup script.
 
 ## Values
+
+> :warning: **USE THE FOLLOWING dev_values.yaml**
+
+``` yaml
+webService:
+  pullPolicy: Always
+  host: http://localhost:5000
+  globusClient: <GLOBUS_CLIENT_ID_STRING>
+  globusKey: <GLOBUS_CLIENT_KEY_STRING>
+  tag: forwarder_rearch_update
+
+endpoint:
+  enabled: false
+funcx_endpoint:
+  image:
+    tag: exception
+
+forwarder:
+  enabled: true
+  tag: forwarder_redesign
+  pullPolicy: Never
+  use_local_image: false
+  local_image: funcx-forwarder-dev1:latest
+
+redis:
+  master:
+    service:
+      nodePort: 30379
+      type: NodePort
+postgresql:
+  service:
+    nodePort: 30432
+    type: NodePort
+```
 There are a few values that can be set to adjust the deployed system 
 configuration
 
