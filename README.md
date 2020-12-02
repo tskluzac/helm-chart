@@ -114,7 +114,7 @@ funcx_endpoint:
 forwarder:
   enabled: true
   tag: forwarder_redesign
-  pullPolicy: Never
+  pullPolicy: Always
   use_local_image: false
   local_image: funcx-forwarder-dev1:latest
 
