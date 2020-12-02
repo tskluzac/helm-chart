@@ -16,10 +16,11 @@ spec:
       hostNetwork: true
       containers:
       - name: {{ .Release.Name }}-forwarder
-        {{- /*
-        image: {{ .Values.forwarder.image }}:{{ .Values.forwarder.tag }}
-        */}}
+        {{ if .Values.forwarder.use_local_image }}
         image: {{ .Values.forwarder.local_image }}
+        {{ else }}
+        image: {{ .Values.forwarder.image }}:{{ .Values.forwarder.tag }}
+        {{ end }}
         env:
         - name: REDIS_HOST
           value: "{{ .Release.Name }}-redis-master"
