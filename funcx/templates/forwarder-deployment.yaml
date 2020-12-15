@@ -49,13 +49,16 @@ spec:
             hostPort: {{ add .Values.forwarder.commandsPort 1 }}
           - containerPort: 55005 # Debug
             hostPort: 55005
+        {{- if .Values.forwarder.server_cert }}
         volumeMounts:
         - name: funcx-forwarder-secret
           mountPath: /home/funcx/.curve
           readOnly: true
+        {{- end }}
+      {{- if .Values.forwarder.server_cert }}
       volumes:
       - name: funcx-forwarder-secret
         secret:
-          secretName: funcx-forwarder-secretkey
-
+          secretName: funcx-forwarder-secrets
+      {{- end }}
 {{- end }}

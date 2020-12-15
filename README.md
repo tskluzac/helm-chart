@@ -42,7 +42,7 @@ Similary you need the server secret key `funcx-forwarder-secretkey` for the forw
 ```shell script
 # Make sure the server.key_secret file is in your $PWD/.curve dir
 # You have to get keys from Yadu
-kubectl create secret generic funcx-forwarder-secretkey --from-file=.curve/server.key_secret
+kubectl create secret generic funcx-forwarder-secrets --from-file=.curve/server.key --from-file=.curve/server.key_secret
 ```
 
 > :warning: The `.curve/server.key` must be copied over to the .funcx/<ENDPOINT_NAME>/credentials folder
