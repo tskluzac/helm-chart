@@ -38,21 +38,28 @@ kubectl create secret generic funcx-sdk-tokens --from-file=credentials/funcx_sdk
 popd
 ```
 
-Similary you need the server secret key `funcx-forwarder-secretkey` for the forwarder service.
+
+> :warning: *Only for debugging*: You can set the forwarder curve server key manually by creating
+  a public/secret curve pair, registering them with kubernetes as a secret and then specifying
+  `forwarder.server_cert = true`. By default the forwarder auto generates keys, and distributes it
+  to the endpoint during registration.
+
+To manually setup the keys for debugging, here are the steps:
+
+1. Create your cureve server public/secret keypair with the create_certs.py script:
+
+    ```shell script
+    # CD into the funcx-forwarder repo
+    python3 test/create_certs.py -d .curve
+    ```
+
+2. Similar to the `funcx-sdk-tokens` add the public/secret pair as kubernetes secret:`funcx-forwarder-secrets` for the forwarder service.
 ```shell script
 # Make sure the server.key_secret file is in your $PWD/.curve dir
-# You have to get keys from Yadu
 kubectl create secret generic funcx-forwarder-secrets --from-file=.curve/server.key --from-file=.curve/server.key_secret
 ```
 
-> :warning: The `.curve/server.key` must be copied over to the .funcx/<ENDPOINT_NAME>/credentials folder
-  after a new endpoint is configured.
-
-If you have not setup your server secret key, please make new keys with the create_certs.py script
-```shell script
-# CD into the funcx-forwarder repo
-python3 test/create_certs.py -d .curve
-```
+3. Once the endpoint is registered to the newly deployed `funcx-forwarder`, make sure to check the `~/.funcx/<ENDPOINT_NAME>/certificates/server.key` file to confirm that the manually added key has been returned to the endpoint.
 
 ### Forwarder
 The forwarder needs to be able to open and manage arbitrary ports which is
