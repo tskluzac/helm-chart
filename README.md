@@ -4,7 +4,7 @@ Helm Chart for Deploying funcX stack
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![NSF-2004894](https://img.shields.io/badge/NSF-2004894-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=2004894)
 [![NSF-2004932](https://img.shields.io/badge/NSF-2004932-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=2004932)
- 
+
 This application includes:
 * FuncX Web-Service
 * Kuberentes endpoint
@@ -16,24 +16,24 @@ This application includes:
 ## Preliminaries
 The following dependencies must be set up before you can deploy the helm chart:
 
-## Kubernetes Endpoint 
-We can deploy the kubernetes endpoint as a pod as part of the chart. It 
-needs to have a valid copy of the funcx's `funcx_sdk_tokens.json` which can 
+## Kubernetes Endpoint
+We can deploy the kubernetes endpoint as a pod as part of the chart. It
+needs to have a valid copy of the funcx's `funcx_sdk_tokens.json` which can
 be created by running on your local workstation and running
 ```shell script
  funcx-endpoint start
 ```
 
-You will be prompted to follow the authorization link and paste the resulting 
-token into the console. Once you do that, funcx-endpoint will create a 
-`~/.funcx` directory and provide you with a token file. 
+You will be prompted to follow the authorization link and paste the resulting
+token into the console. Once you do that, funcx-endpoint will create a
+`~/.funcx` directory and provide you with a token file.
 
 The Kubernetes endpoint expects this file to be available as a Kubernetes
-secret named `funcx-sdk-tokens`. 
+secret named `funcx-sdk-tokens`.
 
 You can install this secret with:
 ```shell script
-pushd ~/.funcx 
+pushd ~/.funcx
 kubectl create secret generic funcx-sdk-tokens --from-file=credentials/funcx_sdk_tokens.json
 popd
 ```
@@ -55,7 +55,7 @@ python3 test/create_certs.py -d .curve
 ```
 
 ### Forwarder
-The forwarder needs to be able to open and manage arbitrary ports which is 
+The forwarder needs to be able to open and manage arbitrary ports which is
 not compatible with some of Kubernetes requirements. For now we will run it
 as a docker container, but outside of the cluster.
 
@@ -81,7 +81,7 @@ Launch a copy of forwarder outside of kubernetes, listening on port 8080:
     ```shell script
     helm install -f deployed_values/values.yaml funcx funcx
     ```
-6. You can access your web service through the ingres or via a port forward 
+6. You can access your web service through the ingres or via a port forward
 to the web service pod. Instructions are provided in the displayed notes.
 
 7. You should be able to see the endpoint registering with the web service
@@ -127,7 +127,7 @@ postgresql:
     nodePort: 30432
     type: NodePort
 ```
-There are a few values that can be set to adjust the deployed system 
+There are a few values that can be set to adjust the deployed system
 configuration
 
 | Value                          | Desciption                                                          | Default           |
@@ -159,8 +159,8 @@ configuration
 | `postgres.enabled`             | Deploy a postgres instance?                                         | true |
 
 ## Subcharts
-This chart uses two subcharts to supply dependent services. You can update 
-settings for these by referenceing the subchart name and values from 
+This chart uses two subcharts to supply dependent services. You can update
+settings for these by referenceing the subchart name and values from
 their READMEs.
 
 For example
@@ -171,9 +171,3 @@ postgresql.postgresqlUsername: funcx
 | ---------- | --------------------- |
 | postgresql | [https://github.com/bitnami/charts/tree/master/bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) |
 | redis      | [https://github.com/bitnami/charts/tree/master/bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) |
-
-
-
-
-
-
